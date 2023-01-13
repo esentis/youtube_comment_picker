@@ -1,0 +1,18 @@
+# Copyright (c) 2019, the Dart project authors.  Please see the AUTHORS file
+# for details. All rights reserved. Use of this source code is governed by a
+# BSD-style license that can be found in the LICENSE file.
+#
+# Google internally enforced rules. See README.md for more information,
+# including a list of lints that are intentionally _not_ enforced.
+include: package:lint/analysis_options.yaml
+analyzer:
+  language:
+    strict-raw-types: true
+  strong-mode:
+    implicit-casts: true
+
+linter:
+  rules:
+    constant_identifier_names: false
+    depend_on_referenced_packages: false
+    avoid_dynamic_calls: false
