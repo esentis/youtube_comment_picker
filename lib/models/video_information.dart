@@ -23,7 +23,7 @@ class VideoInformation {
             DateTime.tryParse(json['items'][0]['snippet']['publishedAt']),
         title: json['items'][0]['snippet']['title'],
         description: json['items'][0]['snippet']['description'],
-        thumbnail: json['items'][0]['snippet']['thumbnails']['maxres']['url'],
+        thumbnail: json['items'][0]['snippet']['thumbnails']['maxres']?['url'],
         channelTitle: json['items'][0]['snippet']['channelTitle'],
         tags: json['items'][0]['snippet']['tags'],
         viewCount: json['items'][0]['statistics']['viewCount'],
