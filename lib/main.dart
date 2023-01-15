@@ -2,8 +2,10 @@ import 'dart:math';
 
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:lottie/lottie.dart';
+import 'package:substring_highlight/substring_highlight.dart';
 import 'package:youtube_comment_picker/constants.dart';
 import 'package:youtube_comment_picker/models/comments_response.dart';
 import 'package:youtube_comment_picker/models/video_information.dart';
@@ -70,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kColorRedYtb.withOpacity(0.1),
       appBar: AppBar(
         title: Text(widget.title),
         backgroundColor: kColorRedYtb,
@@ -78,22 +81,21 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           children: <Widget>[
             const SizedBox(
-              height: 20,
+              height: 40,
             ),
-            const Text('Please provide video ID or URL'),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: TextField(
                 controller: _videoFieldController,
+                decoration: kInputDecoration(labeText: 'URL or Video ID'),
               ),
             ),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith((state) {
-                  return kColorRedYtb;
-                }),
-              ),
-              onPressed: () async {
+            const SizedBox(
+              height: 20,
+            ),
+            Bounceable(
+              scaleFactor: 0.7,
+              onTap: () async {
                 if (_videoFieldController.text.isNotEmpty) {
                   isSearching = true;
                   setState(() {});
@@ -102,7 +104,22 @@ class _MyHomePageState extends State<MyHomePage> {
                   setState(() {});
                 }
               },
-              child: const Text('Search'),
+              child: Container(
+                height: 50,
+                width: 100,
+                decoration: BoxDecoration(
+                  color: kColorRedYtb,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Search',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
             ),
             const SizedBox(
               height: 20,
@@ -131,16 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
                 child: TextField(
                   controller: _filterTextController,
-                  decoration: InputDecoration(
-                    focusColor: Colors.red,
-                    label: const Text('Filter'),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
+                  decoration: kInputDecoration(labeText: 'Search comments'),
                   onChanged: (value) {
                     setState(() {
                       showFilteredComments = false;
@@ -153,13 +161,14 @@ class _MyHomePageState extends State<MyHomePage> {
                           )
                           .toList();
                       final Random random = Random();
-
-                      while (randomFilteredComments.length !=
-                          selectedCommentsCount) {
-                        final int randomNumber =
-                            random.nextInt(filteredComments.length) + 1;
-                        randomFilteredComments
-                            .add(filteredComments[randomNumber]);
+                      if (filteredComments.isNotEmpty) {
+                        while (randomFilteredComments.length !=
+                            selectedCommentsCount) {
+                          final int randomNumber =
+                              random.nextInt(filteredComments.length) + 1;
+                          randomFilteredComments
+                              .add(filteredComments[randomNumber]);
+                        }
                       }
                     });
                   },
@@ -169,127 +178,121 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 10,
               ),
               if (_filterTextController.text.isNotEmpty) ...[
-                Text(
-                  '${filteredComments.length} comments found containg above filter',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Slider(
-                  value: selectedCommentsCount.toDouble(),
-                  max: values.length - 1,
-                  min: 1,
-                  divisions: values.length - 1,
-                  onChangeEnd: (v) {
-                    setState(() {
-                      selectedCommentsCount = v.toInt();
-
-                      final Random random = Random();
-                      randomFilteredComments = [];
-                      while (randomFilteredComments.length !=
-                          selectedCommentsCount) {
-                        final int randomNumber =
-                            random.nextInt(filteredComments.length) + 1;
-                        randomFilteredComments
-                            .add(filteredComments[randomNumber]);
-                      }
-                    });
-                  },
-                  onChanged: (v) {
-                    setState(() {
-                      selectedCommentsCount = v.toInt();
-                      if (showFilteredComments) {
-                        showFilteredComments = false;
-                      }
-                    });
-                  },
-                  label: '$selectedCommentsCount',
-                ),
                 const SizedBox(
                   height: 10,
                 ),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith((state) {
-                      return kColorRedYtb;
-                    }),
-                  ),
-                  onPressed: () async {
+                Bounceable(
+                  onTap: () async {
                     setState(() {
                       showFilteredComments = !showFilteredComments;
                     });
                   },
-                  child: Text(
-                    showFilteredComments
-                        ? 'Hide filtered comments'
-                        : 'Show $selectedCommentsCount filtered comments',
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                if (showFilteredComments)
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.resolveWith((state) {
-                        return kColorRedYtb;
-                      }),
+                  child: Container(
+                    height: 50,
+                    width: 250,
+                    decoration: BoxDecoration(
+                      color: filteredComments.isEmpty
+                          ? kColorRedYtb.withOpacity(0.3)
+                          : kColorRedYtb,
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    onPressed: () async {
-                      final Random random = Random();
-                      randomFilteredComments = [];
-                      while (randomFilteredComments.length !=
-                          selectedCommentsCount) {
-                        final int randomNumber =
-                            random.nextInt(filteredComments.length) + 1;
-                        randomFilteredComments
-                            .add(filteredComments[randomNumber]);
-                      }
-                      setState(() {});
-                    },
-                    child: Text(
-                      'Show new $selectedCommentsCount random comments',
+                    child: Center(
+                      child: Text(
+                        showFilteredComments
+                            ? 'Hide ${filteredComments.length} filtered comments'
+                            : filteredComments.isEmpty
+                                ? 'No comments found'
+                                : 'Show ${filteredComments.length} filtered comments',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
+                ),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+                // if (showFilteredComments)
+                //   Bounceable(
+                //     onTap: () async {
+                //       final Random random = Random();
+                //       randomFilteredComments = [];
+                //       while (randomFilteredComments.length !=
+                //           selectedCommentsCount) {
+                //         final int randomNumber =
+                //             random.nextInt(filteredComments.length) + 1;
+                //         randomFilteredComments
+                //             .add(filteredComments[randomNumber]);
+                //       }
+                //       setState(() {});
+                //     },
+                //     child: Container(
+                //       height: 50,
+                //       width: 250,
+                //       decoration: BoxDecoration(
+                //         color: kColorRedYtb,
+                //         borderRadius: BorderRadius.circular(12),
+                //       ),
+                //       child: Center(
+                //         child: Text(
+                //           'Show new $selectedCommentsCount random comments',
+                //           style: TextStyle(
+                //             color: Colors.white,
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //   ),
                 const SizedBox(
                   height: 30,
                 ),
                 if (showFilteredComments)
-                  ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: selectedCommentsCount,
-                    itemBuilder: (context, index) => ListTile(
-                      key: ValueKey(
-                        randomFilteredComments[index]!.authorProfileImageUrl!,
-                      ),
-                      leading: ExtendedImage.network(
-                        randomFilteredComments[index]!.authorProfileImageUrl!,
-                        height: 50,
-                        width: 50,
-                        fit: BoxFit.fill,
-                        shape: BoxShape.circle,
-                        loadStateChanged: (state) {
-                          if (state.extendedImageLoadState ==
-                              LoadState.failed) {
-                            return Image.network(
-                              'https://i.imgur.com/qV26MhU.png',
-                            );
-                          }
-                          if (state.extendedImageLoadState ==
-                              LoadState.loading) {
-                            return LottieBuilder.asset(
-                              'assets/loading.json',
-                              height: 100,
-                            );
-                          }
-                        },
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(30.0),
+                  SizedBox(
+                    height: 350,
+                    child: ListView.separated(
+                      separatorBuilder: (context, index) => Divider(),
+                      itemCount: filteredComments.length,
+                      itemBuilder: (context, index) => ListTile(
+                        key: ValueKey(
+                          filteredComments[index]!.authorProfileImageUrl!,
                         ),
+                        leading: ExtendedImage.network(
+                          filteredComments[index]!.authorProfileImageUrl!,
+                          height: 50,
+                          width: 50,
+                          fit: BoxFit.fill,
+                          shape: BoxShape.circle,
+                          loadStateChanged: (state) {
+                            if (state.extendedImageLoadState ==
+                                LoadState.failed) {
+                              return Image.network(
+                                'https://i.imgur.com/qV26MhU.png',
+                              );
+                            }
+                            if (state.extendedImageLoadState ==
+                                LoadState.loading) {
+                              return LottieBuilder.asset(
+                                'assets/loading.json',
+                                height: 100,
+                              );
+                            }
+                          },
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(30.0),
+                          ),
+                        ),
+                        title: SubstringHighlight(
+                          text: filteredComments[index]!.text!,
+                          term: _filterTextController.text,
+                          textStyleHighlight: TextStyle(
+                            color: kColorRedYtb,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        subtitle: Text(filteredComments[index]!.authorName!),
                       ),
-                      title: Text(randomFilteredComments[index]!.text!),
                     ),
                   )
               ]
