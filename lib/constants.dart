@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Color kColorRedYtb = const Color(0xffE83020);
 
@@ -23,3 +24,8 @@ InputDecoration kInputDecoration({required String labeText}) => InputDecoration(
         ),
       ),
     );
+Future<void> kLaunchUrl(String url) async {
+  if (!await launchUrl(Uri.parse(url))) {
+    throw Exception('Could not launch');
+  }
+}
