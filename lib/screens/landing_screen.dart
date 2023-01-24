@@ -37,7 +37,6 @@ class _LandingScreenState extends State<LandingScreen> {
   final List<double> values = [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 10.0, 15.0];
   int selectedCommentsCount = 1;
 
-  ScrollController _commentsScrollController = ScrollController();
   YoutubePlayerController? _controller;
 
   Future<void> prepareComments(String video) async {
