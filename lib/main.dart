@@ -4,7 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:youtube_comment_picker/screens/landing_screen.dart';
 
 Future<void> main() async {
-  await dotenv.load();
+  await dotenv.load(fileName: 'dotenv');
   runApp(const MyApp());
 }
 
