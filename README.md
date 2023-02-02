@@ -1,5 +1,7 @@
 # YouTube Comment Picker
 
-Do you want to randmoly pick a comment from a YouTube video, based on some specific inputs ? Don't look further, this is your tool !
+Youtube Comment Picker is a web app designed to help users search and analyze YouTube comments. This app provides a convenient solution for content creators, marketers, or anyone interested in exploring the comments on a video.
 
-If you are channel owner, who wants to randomly pick a comment after prompting users to comment a specific pattern e.g #PS5GiveAway.
+With its intuitive interface and advanced search functionality, Youtube Comment Picker makes it simple to uncover valuable insights hidden in the vast sea of YouTube comments. Whether you're looking for specific information or just want to get a better understanding of what people are saying, this app has got you covered.
+
+This Github repository contains the code for the web app. As a one-person project, I welcome contributions and feedback from the open-source community. Whether you're a developer, user, or simply interested in the project, I'd love to hear from you!
