@@ -32,7 +32,6 @@ class _LandingScreenState extends State<LandingScreen> {
   List<Comment?> randomFilteredComments = [];
 
   bool isSearching = false;
-  // bool showFilteredComments = false;
 
   final List<double> values = [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 10.0, 15.0];
   int selectedCommentsCount = 1;
@@ -78,6 +77,22 @@ class _LandingScreenState extends State<LandingScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          if (allComments.isNotEmpty)
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  allComments = [];
+                  filteredComments = [];
+                  randomFilteredComments = [];
+                  videoInfo = null;
+                  _videoFieldController.clear();
+                  _filterTextController.clear();
+                });
+              },
+              icon: const Icon(Icons.refresh),
+            )
+        ],
         backgroundColor: kColorRedYtb,
       ),
       body: Column(
@@ -90,7 +105,8 @@ class _LandingScreenState extends State<LandingScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: TextField(
                 controller: _videoFieldController,
-                decoration: kInputDecoration(labeText: 'URL or Video ID'),
+                decoration:
+                    kInputDecoration(labeText: 'Enter a video URL or ID'),
               ),
             ),
             const SizedBox(
@@ -138,20 +154,31 @@ class _LandingScreenState extends State<LandingScreen> {
             )
           else if (videoInfo != null) ...[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Flexible(
+                    flex: 3,
                     child: Text(
                       videoInfo!.title!,
-                      textAlign: TextAlign.center,
+                      textAlign: TextAlign.left,
                       style: const TextStyle(
-                        fontSize: 20,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  Text('${videoInfo?.viewCount} views'),
+                  Flexible(
+                    child: Text(
+                      '${videoInfo?.viewCount} views',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -194,15 +221,6 @@ class _LandingScreenState extends State<LandingScreen> {
                       // }
                     },
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    '${filteredComments.length} comments found',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -214,6 +232,19 @@ class _LandingScreenState extends State<LandingScreen> {
                 child: CustomScrollView(
                   slivers: [
                     if (filteredComments.isNotEmpty) ...[
+                      SliverAppBar(
+                        backgroundColor: kColorRedYtb,
+                        elevation: 12,
+                        primary: false,
+                        pinned: true,
+                        shadowColor: kColorRedYtb,
+                        title: Text(
+                          '${filteredComments.length} comments found',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                       SliverList(
                         delegate: SliverChildBuilderDelegate(
                           (ctx, index) {
