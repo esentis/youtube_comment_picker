@@ -141,8 +141,12 @@ class _LandingScreenState extends State<LandingScreen> {
               ),
             ),
           ] else
-            YoutubePlayer(
-              controller: _controller!,
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 250,
+              child: YoutubePlayer(
+                controller: _controller!,
+              ),
             ),
           const SizedBox(
             height: 20,
