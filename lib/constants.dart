@@ -4,7 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 Color kColorRedYtb = const Color(0xffE83020);
 
 InputDecoration kInputDecoration({required String labeText}) => InputDecoration(
-      focusColor: Colors.red,
+      focusColor: kColorRedYtb,
       labelStyle: TextStyle(
         color: kColorRedYtb.withOpacity(0.5),
       ),
