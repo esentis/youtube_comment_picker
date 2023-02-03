@@ -1,9 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:url_strategy/url_strategy.dart';
 import 'package:youtube_comment_picker/screens/landing_screen.dart';
 
 Future<void> main() async {
+  setPathUrlStrategy();
   await dotenv.load(fileName: 'dotenv');
   runApp(const MyApp());
 }
