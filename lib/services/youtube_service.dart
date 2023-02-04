@@ -48,36 +48,55 @@ Future<List<Comment?>> getComments(String video, BuildContext context) async {
     videoId = video;
   }
 
-  final response = await dio.get(
-    'commentThreads',
-    queryParameters: {
-      "part": "snippet",
-      "maxResults": "100",
-      "videoId": videoId,
-      "key": dotenv.env['API_KEY'],
-    },
-  );
-  CommentsResponse res =
-      CommentsResponse.fromJson(response.data as Map<String, dynamic>);
-
-  comments.addAll(res.comments?.toList() ?? []);
-
-  // While the response has [nextPageToken] parameter there are still pages with comments.
-  // We keep on requesting and populating the comments list.
-  while (res.nextPageToken != null) {
+  try {
     final response = await dio.get(
       'commentThreads',
       queryParameters: {
         "part": "snippet",
         "maxResults": "100",
         "videoId": videoId,
-        "pageToken": res.nextPageToken,
         "key": dotenv.env['API_KEY'],
       },
     );
-    res = CommentsResponse.fromJson(response.data as Map<String, dynamic>);
+    CommentsResponse res =
+        CommentsResponse.fromJson(response.data as Map<String, dynamic>);
 
     comments.addAll(res.comments?.toList() ?? []);
+
+    // While the response has [nextPageToken] parameter there are still pages with comments.
+    // We keep on requesting and populating the comments list.
+    while (res.nextPageToken != null) {
+      final response = await dio.get(
+        'commentThreads',
+        queryParameters: {
+          "part": "snippet",
+          "maxResults": "100",
+          "videoId": videoId,
+          "pageToken": res.nextPageToken,
+          "key": dotenv.env['API_KEY'],
+        },
+      );
+      res = CommentsResponse.fromJson(response.data as Map<String, dynamic>);
+
+      comments.addAll(res.comments?.toList() ?? []);
+    }
+  } on DioError catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        width: MediaQuery.of(context).size.width * .8,
+        backgroundColor: Colors.red,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 20,
+        ),
+        shape: const RoundedRectangleBorder(),
+        content: Text(
+          e.message,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
   }
   return comments;
 }
