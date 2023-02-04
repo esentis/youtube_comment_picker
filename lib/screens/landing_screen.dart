@@ -169,45 +169,48 @@ class _LandingScreenState extends State<LandingScreen> {
               height: 100,
             )
           else if (videoInfo != null) ...[
-            Column(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  videoInfo!.title!,
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+            Padding(
+              padding: const EdgeInsets.only(left: 30.0),
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    videoInfo!.title!,
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      '${formatter.format(videoInfo?.viewCount.toInt())} views',
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: Colors.white,
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        '${formatter.format(videoInfo?.viewCount.toInt())} views',
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    Text(
-                      '   ${DateFormat('MMM d, yyyy').format(videoInfo!.publishedAt!)}',
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: Colors.white,
+                      Text(
+                        '   ${DateFormat('MMM d, yyyy').format(videoInfo!.publishedAt!)}',
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
             const SizedBox(
               height: 30,
@@ -219,6 +222,9 @@ class _LandingScreenState extends State<LandingScreen> {
                   children: [
                     TextField(
                       controller: _filterTextController,
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
                       decoration: kInputDecoration(labeText: 'Search comments')
                           .copyWith(
                         labelStyle: const TextStyle(
