@@ -3,6 +3,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:string_extensions/string_extensions.dart';
 import 'package:substring_highlight/substring_highlight.dart';
@@ -37,6 +38,8 @@ class _LandingScreenState extends State<LandingScreen> {
   int selectedCommentsCount = 1;
 
   YoutubePlayerController? _controller;
+
+  NumberFormat formatter = NumberFormat('#,###,000');
 
   Future<void> prepareComments(String video) async {
     allComments = [];
@@ -74,7 +77,7 @@ class _LandingScreenState extends State<LandingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
@@ -105,8 +108,17 @@ class _LandingScreenState extends State<LandingScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: TextField(
                 controller: _videoFieldController,
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
                 decoration:
-                    kInputDecoration(labeText: 'Enter a video URL or ID'),
+                    kInputDecoration(labeText: 'Enter a video URL or ID')
+                        .copyWith(
+                  labelStyle: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
               ),
             ),
             const SizedBox(
@@ -157,77 +169,105 @@ class _LandingScreenState extends State<LandingScreen> {
               height: 100,
             )
           else if (videoInfo != null) ...[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Flexible(
-                    flex: 3,
-                    child: Text(
-                      videoInfo!.title!,
+            Column(
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  videoInfo!.title!,
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      '${formatter.format(videoInfo?.viewCount.toInt())} views',
                       textAlign: TextAlign.left,
                       style: const TextStyle(
-                        fontSize: 17,
                         fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: Colors.white,
                       ),
                     ),
-                  ),
-                  Flexible(
-                    child: Text(
-                      '${videoInfo?.viewCount} views',
+                    Text(
+                      '   ${DateFormat('MMM d, yyyy').format(videoInfo!.publishedAt!)}',
+                      textAlign: TextAlign.left,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 17,
+                        fontSize: 15,
+                        color: Colors.white,
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+              ],
             ),
             const SizedBox(
               height: 30,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
-              child: Column(
-                children: [
-                  TextField(
-                    controller: _filterTextController,
-                    decoration: kInputDecoration(labeText: 'Search comments'),
-                    onChanged: (value) {
-                      log.wtf(value.length);
+            if (allComments.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: _filterTextController,
+                      decoration: kInputDecoration(labeText: 'Search comments')
+                          .copyWith(
+                        labelStyle: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      ),
+                      onChanged: (value) {
+                        log.wtf(value.length);
 
-                      setState(() {
-                        if (value.isNotEmpty) {
-                          filteredComments = allComments
-                              .where(
-                                (c) => c!.text!
-                                    .toLowerCase()
-                                    .contains(value.toLowerCase()),
-                              )
-                              .toList();
-                        } else {
-                          log.wtf('Value is empty');
-                          filteredComments = allComments;
-                        }
-                      });
+                        setState(() {
+                          if (value.isNotEmpty) {
+                            filteredComments = allComments
+                                .where(
+                                  (c) => c!.text!
+                                      .toLowerCase()
+                                      .contains(value.toLowerCase()),
+                                )
+                                .toList();
+                          } else {
+                            log.wtf('Value is empty');
+                            filteredComments = allComments;
+                          }
+                        });
 
-                      // else {
-                      //   if (filteredComments.isNotEmpty) {
-                      //     log.wtf('Resetting filters');
-                      //     filteredComments = [];
-                      //     filteredComments.addAll(allComments);
-                      //     log.wtf('Filters are ${filteredComments.length}');
-                      //     setState(() {});
-                      //   }
-                      // }
-                    },
-                  ),
-                ],
+                        // else {
+                        //   if (filteredComments.isNotEmpty) {
+                        //     log.wtf('Resetting filters');
+                        //     filteredComments = [];
+                        //     filteredComments.addAll(allComments);
+                        //     log.wtf('Filters are ${filteredComments.length}');
+                        //     setState(() {});
+                        //   }
+                        // }
+                      },
+                    ),
+                  ],
+                ),
+              )
+            else
+              const Text(
+                'No comments found',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-            ),
             if (filteredComments.isNotEmpty) ...[
               const SizedBox(
                 height: 10,
@@ -255,6 +295,7 @@ class _LandingScreenState extends State<LandingScreen> {
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Card(
+                                color: const Color(0xff20262E),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: ListTile(
@@ -305,9 +346,14 @@ class _LandingScreenState extends State<LandingScreen> {
                                         SubstringHighlight(
                                           text: filteredComments[index]!.text!,
                                           term: _filterTextController.text,
+                                          textStyle: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                           textStyleHighlight: TextStyle(
                                             color: kColorRedYtb,
-                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
                                           ),
                                         ),
                                         const SizedBox(
@@ -315,7 +361,10 @@ class _LandingScreenState extends State<LandingScreen> {
                                         ),
                                         Row(
                                           children: [
-                                            const Icon(Icons.thumb_up),
+                                            const Icon(
+                                              Icons.thumb_up,
+                                              color: Colors.white,
+                                            ),
                                             const SizedBox(width: 10),
                                             Text(
                                               filteredComments[index]!
@@ -323,7 +372,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                                   .toString(),
                                               style: TextStyle(
                                                 color: kColorRedYtb,
-                                                fontSize: 12,
+                                                fontSize: 13,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -331,12 +380,18 @@ class _LandingScreenState extends State<LandingScreen> {
                                         ),
                                       ],
                                     ),
-                                    title: Text(
-                                      filteredComments[index]!.authorName!,
-                                      style: TextStyle(
-                                        color: kColorRedYtb,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
+                                    title: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0,
+                                      ),
+                                      child: Text(
+                                        filteredComments[index]!.authorName!,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          decoration: TextDecoration.underline,
+                                        ),
                                       ),
                                     ),
                                   ),
