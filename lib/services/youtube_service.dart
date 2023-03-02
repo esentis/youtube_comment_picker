@@ -9,8 +9,8 @@ import 'package:youtube_comment_picker/models/video_information.dart';
 BaseOptions ytbOptions = BaseOptions(
   baseUrl: 'https://youtube.googleapis.com/youtube/v3/',
   receiveDataWhenStatusError: true,
-  connectTimeout: 6 * 1000, // 6 seconds
-  receiveTimeout: 6 * 1000, // 6 seconds
+  connectTimeout: const Duration(seconds: 6), // 6 seconds
+  receiveTimeout: const Duration(seconds: 6), // 6 seconds
 );
 
 final Dio dio = Dio(ytbOptions);
@@ -92,7 +92,7 @@ Future<List<Comment?>> getComments(String video, BuildContext context) async {
         ),
         shape: const RoundedRectangleBorder(),
         content: Text(
-          e.message,
+          '${e.message}',
           textAlign: TextAlign.center,
         ),
       ),
