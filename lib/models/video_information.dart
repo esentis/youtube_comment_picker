@@ -20,13 +20,14 @@ class VideoInformation {
   factory VideoInformation.fromJson(Map<String, dynamic> json) =>
       VideoInformation(
         publishedAt:
-            DateTime.tryParse(json['items'][0]['snippet']['publishedAt']),
-        title: json['items'][0]['snippet']['title'],
-        description: json['items'][0]['snippet']['description'],
-        thumbnail: json['items'][0]['snippet']['thumbnails']['maxres']?['url'],
-        channelTitle: json['items'][0]['snippet']['channelTitle'],
-        tags: json['items'][0]['snippet']['tags'],
-        viewCount: json['items'][0]['statistics']['viewCount'],
+            DateTime.tryParse('${json['items'][0]['snippet']['publishedAt']}'),
+        title: json['items'][0]['snippet']['title'] as String?,
+        description: json['items'][0]['snippet']['description'] as String?,
+        thumbnail: json['items'][0]['snippet']['thumbnails']['maxres']?['url']
+            as String?,
+        channelTitle: json['items'][0]['snippet']['channelTitle'] as String?,
+        tags: json['items'][0]['snippet']['tags'] as List<dynamic>?,
+        viewCount: json['items'][0]['statistics']['viewCount'] as String,
       );
 
   Map<String, dynamic> toJson() => {

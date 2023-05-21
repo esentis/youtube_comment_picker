@@ -15,14 +15,17 @@ class CommentsResponse {
 
   factory CommentsResponse.fromJson(Map<String, dynamic> json) =>
       CommentsResponse(
-        kind: json["kind"],
-        etag: json["etag"],
-        nextPageToken: json["nextPageToken"],
-        pageInfo: PageInfo.fromJson(json["pageInfo"]),
+        kind: json["kind"] as String?,
+        etag: json["etag"] as String?,
+        nextPageToken: json["nextPageToken"] as String?,
+        pageInfo: (json["pageInfo"] != null
+            ? PageInfo.fromJson(json["pageInfo"] as Map<String, dynamic>)
+            : null),
         comments: json["items"] == null
             ? []
             : List<Comment?>.from(
-                json["items"]!.map((x) => Comment.fromJson(x)),
+                (json["items"] as List)
+                    .map((x) => Comment.fromJson(x as Map<String, dynamic>)),
               ),
       );
 
@@ -47,8 +50,8 @@ class PageInfo {
   int? resultsPerPage;
 
   factory PageInfo.fromJson(Map<String, dynamic> json) => PageInfo(
-        totalResults: json["totalResults"],
-        resultsPerPage: json["resultsPerPage"],
+        totalResults: json["totalResults"] as int?,
+        resultsPerPage: json["resultsPerPage"] as int?,
       );
 
   Map<String, dynamic> toJson() => {
@@ -76,19 +79,21 @@ class Comment {
   DateTime? updatedAt;
 
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
-        text: json["snippet"]["topLevelComment"]["snippet"]["textOriginal"],
+        text: json["snippet"]["topLevelComment"]["snippet"]["textOriginal"]
+            as String?,
         authorName: json["snippet"]["topLevelComment"]["snippet"]
-            ["authorDisplayName"],
+            ["authorDisplayName"] as String?,
         authorChannel: json["snippet"]["topLevelComment"]["snippet"]
-            ["authorChannelUrl"],
+            ["authorChannelUrl"] as String?,
         authorProfileImageUrl: json["snippet"]["topLevelComment"]["snippet"]
-            ["authorProfileImageUrl"],
-        likeCount: json["snippet"]["topLevelComment"]["snippet"]["likeCount"],
+            ["authorProfileImageUrl"] as String?,
+        likeCount:
+            json["snippet"]["topLevelComment"]["snippet"]["likeCount"] as int?,
         createdAt: DateTime.tryParse(
-          json["snippet"]["topLevelComment"]["snippet"]["publishedAt"],
+          '${json["snippet"]["topLevelComment"]["snippet"]["publishedAt"]}',
         ),
         updatedAt: DateTime.tryParse(
-          json["snippet"]["topLevelComment"]["snippet"]["updatedAt"],
+          '${json["snippet"]["topLevelComment"]["snippet"]["updatedAt"]}',
         ),
       );
 

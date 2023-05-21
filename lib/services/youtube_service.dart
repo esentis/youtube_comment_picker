@@ -123,7 +123,7 @@ Future<VideoInformation?> getVideoInformation(String video) async {
   );
 
   final VideoInformation videoInformation =
-      VideoInformation.fromJson(response.data);
+      VideoInformation.fromJson(response.data as Map<String, dynamic>);
 
   log.wtf(videoInformation.toJson());
 

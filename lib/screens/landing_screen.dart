@@ -340,6 +340,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                                 height: 100,
                                               );
                                             }
+                                            return null;
                                           },
                                           borderRadius: const BorderRadius.all(
                                             Radius.circular(30.0),
