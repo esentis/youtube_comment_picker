@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
 import 'package:string_extensions/string_extensions.dart';
+import 'package:youtube_comment_picker/models/comment.dart';
 import 'package:youtube_comment_picker/models/comments_response.dart';
 import 'package:youtube_comment_picker/models/video_information.dart';
 

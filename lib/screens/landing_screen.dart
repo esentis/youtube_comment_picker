@@ -8,7 +8,7 @@ import 'package:lottie/lottie.dart';
 import 'package:string_extensions/string_extensions.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 import 'package:youtube_comment_picker/constants.dart';
-import 'package:youtube_comment_picker/models/comments_response.dart';
+import 'package:youtube_comment_picker/models/comment.dart';
 import 'package:youtube_comment_picker/models/video_information.dart';
 import 'package:youtube_comment_picker/services/youtube_service.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
