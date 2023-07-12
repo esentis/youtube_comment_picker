@@ -37,7 +37,7 @@ class _LandingScreenState extends State<LandingScreen> {
   final List<double> values = [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 10.0, 15.0];
   int selectedCommentsCount = 1;
 
-  YoutubePlayerController? _controller;
+  late YoutubePlayerController? _controller;
 
   NumberFormat formatter = NumberFormat('#,###,000');
 

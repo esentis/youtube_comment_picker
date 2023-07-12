@@ -14,3 +14,4 @@ linter:
     constant_identifier_names: false
     depend_on_referenced_packages: false
     avoid_dynamic_calls: false
+    sort_pub_dependencies: false
