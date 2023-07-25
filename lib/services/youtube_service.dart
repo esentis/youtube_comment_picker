@@ -10,8 +10,8 @@ import 'package:youtube_comment_picker/models/video_information.dart';
 BaseOptions ytbOptions = BaseOptions(
   baseUrl: 'https://youtube.googleapis.com/youtube/v3/',
   receiveDataWhenStatusError: true,
-  connectTimeout: const Duration(seconds: 6), // 6 seconds
-  receiveTimeout: const Duration(seconds: 6), // 6 seconds
+  connectTimeout: const Duration(seconds: 6),
+  receiveTimeout: const Duration(seconds: 6),
 );
 
 final Dio dio = Dio(ytbOptions);
