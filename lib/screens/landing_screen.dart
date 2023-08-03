@@ -233,7 +233,7 @@ class _LandingScreenState extends State<LandingScreen> {
                         ),
                       ),
                       onChanged: (value) {
-                        log.wtf(value.length);
+                        log.f(value.length);
 
                         setState(() {
                           if (value.isNotEmpty) {
@@ -245,7 +245,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                 )
                                 .toList();
                           } else {
-                            log.wtf('Value is empty');
+                            log.f('Value is empty');
                             filteredComments = allComments;
                           }
                         });

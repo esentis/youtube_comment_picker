@@ -126,7 +126,7 @@ Future<VideoInformation?> getVideoInformation(String video) async {
   final VideoInformation videoInformation =
       VideoInformation.fromJson(response.data as Map<String, dynamic>);
 
-  log.wtf(videoInformation.toJson());
+  log.f(videoInformation.toJson());
 
   return videoInformation;
 }
