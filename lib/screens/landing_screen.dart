@@ -94,7 +94,7 @@ class _LandingScreenState extends State<LandingScreen> {
                 });
               },
               icon: const Icon(Icons.refresh),
-            )
+            ),
         ],
         backgroundColor: kColorRedYtb,
       ),
@@ -408,13 +408,13 @@ class _LandingScreenState extends State<LandingScreen> {
                           },
                           childCount: filteredComments.length,
                         ),
-                      )
+                      ),
                     ],
                   ],
                 ),
-              )
-            ]
-          ]
+              ),
+            ],
+          ],
         ],
       ),
 // This trailing comma makes auto-formatting nicer for build methods.

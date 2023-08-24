@@ -82,22 +82,24 @@ Future<List<Comment?>> getComments(String video, BuildContext context) async {
       comments.addAll(res.comments?.toList() ?? []);
     }
   } on DioException catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        width: MediaQuery.of(context).size.width * .8,
-        backgroundColor: Colors.red,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 20,
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          width: MediaQuery.of(context).size.width * .8,
+          backgroundColor: Colors.red,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 20,
+          ),
+          shape: const RoundedRectangleBorder(),
+          content: Text(
+            '${e.message}',
+            textAlign: TextAlign.center,
+          ),
         ),
-        shape: const RoundedRectangleBorder(),
-        content: Text(
-          '${e.message}',
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
+      );
+    }
   }
   return comments;
 }
