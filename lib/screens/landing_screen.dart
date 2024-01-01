@@ -67,10 +67,12 @@ class _LandingScreenState extends State<LandingScreen> {
       filteredComments.addAll(res[0] as List<Comment?>);
       videoInfo = res[1] as VideoInformation?;
 
-      allComments
-          .sort((a, b) => Comparable.compare(b!.likeCount!, a!.likeCount!));
-      filteredComments
-          .sort((a, b) => Comparable.compare(b!.likeCount!, a!.likeCount!));
+      allComments.sort(
+        (a, b) => Comparable.compare(b?.likeCount ?? 0, a?.likeCount ?? 0),
+      );
+      filteredComments.sort(
+        (a, b) => Comparable.compare(b?.likeCount ?? 0, a?.likeCount ?? 0),
+      );
     }
   }
 
