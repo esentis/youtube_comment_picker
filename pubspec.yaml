@@ -38,7 +38,7 @@ dependencies:
   dio: ^5.0.1
   logger: ^2.0.1
   lint: ^2.0.1
-  string_extensions: ^0.6.6
+  string_extensions: ^0.7.0
   flutter_dotenv: ^5.0.2
   extended_image: ^8.0.1
   lottie: ^3.0.0
