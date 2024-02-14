@@ -47,7 +47,7 @@ class _LandingScreenState extends State<LandingScreen> {
     String videoId = '';
 
     if (video.length > 11) {
-      videoId = video.after('?v=').before('&ab_channel')!;
+      videoId = video.after('?v=').before('&ab_channel');
     } else {
       videoId = video;
     }
