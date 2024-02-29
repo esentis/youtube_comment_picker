@@ -45,7 +45,7 @@ dependencies:
   flutter_bounceable: ^1.1.0
   substring_highlight: ^1.0.33
   url_launcher: ^6.1.8
-  youtube_player_iframe: ^4.0.1
+  youtube_player_iframe: ^5.0.0
   url_strategy: ^0.2.0
 
 dev_dependencies:
