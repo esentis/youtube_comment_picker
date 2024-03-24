@@ -37,7 +37,7 @@ dependencies:
   lint: ^2.0.1
   string_extensions: ^0.7.0
   flutter_dotenv: ^5.0.2
-  extended_image: ^8.0.1
+  extended_image: ^8.2.0
   lottie: ^3.0.0
   flutter_bounceable: ^1.1.0
   substring_highlight: ^1.0.33
