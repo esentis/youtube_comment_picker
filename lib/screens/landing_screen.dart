@@ -2,7 +2,6 @@
 
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:string_extensions/string_extensions.dart';
@@ -11,6 +10,7 @@ import 'package:youtube_comment_picker/constants.dart';
 import 'package:youtube_comment_picker/models/comment.dart';
 import 'package:youtube_comment_picker/models/video_information.dart';
 import 'package:youtube_comment_picker/services/youtube_service.dart';
+import 'package:youtube_comment_picker/widgets/search_video.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class LandingScreen extends StatefulWidget {
@@ -103,32 +103,9 @@ class _LandingScreenState extends State<LandingScreen> {
       body: Column(
         children: <Widget>[
           if (allComments.isEmpty) ...[
-            const SizedBox(
-              height: 40,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
-              child: TextField(
-                controller: _videoFieldController,
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
-                decoration:
-                    kInputDecoration(labeText: 'Enter a video URL or ID')
-                        .copyWith(
-                  labelStyle: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Bounceable(
-              scaleFactor: 0.7,
-              onTap: () async {
+            SearchVideo(
+              videoFieldController: _videoFieldController,
+              onSearch: () async {
                 if (_videoFieldController.text.isNotEmpty) {
                   isSearching = true;
                   setState(() {});
@@ -137,22 +114,6 @@ class _LandingScreenState extends State<LandingScreen> {
                   setState(() {});
                 }
               },
-              child: Container(
-                height: 50,
-                width: 100,
-                decoration: BoxDecoration(
-                  color: kColorRedYtb,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Center(
-                  child: Text(
-                    'Search',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
             ),
           ] else
             SizedBox(
