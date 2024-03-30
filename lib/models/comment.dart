@@ -21,6 +21,14 @@ class Comment {
   /// The date and time when the comment was last updated.
   DateTime? updatedAt;
 
+  /// TIf a comment has been hearted by the channel owner,
+  /// the viewerRating field will have the value like.
+  /// However, it's important to note that this field indicates
+  /// the rating given by the currently authenticated user (if applicable),
+  /// so it specifically shows if the authenticated user has liked the comment,
+  /// not necessarily if the comment has been hearted by the channel owner.
+  final String? viewerRating;
+
   /// Creates a new instance of the [Comment] class.
   Comment({
     this.authorChannel,
@@ -30,6 +38,7 @@ class Comment {
     this.likeCount,
     this.text,
     this.updatedAt,
+    this.viewerRating,
   });
 
   /// Creates a new instance of the [Comment] class from a JSON object.
@@ -44,6 +53,8 @@ class Comment {
             ["authorProfileImageUrl"] as String?,
         likeCount:
             json["snippet"]["topLevelComment"]["snippet"]["likeCount"] as int?,
+        viewerRating: json["snippet"]["topLevelComment"]["snippet"]
+            ["viewerRating"] as String?,
         createdAt: DateTime.tryParse(
           '${json["snippet"]["topLevelComment"]["snippet"]["publishedAt"]}',
         ),
@@ -59,6 +70,7 @@ class Comment {
         "authorProfileImageUrl": authorProfileImageUrl,
         "text": text,
         "likeCount": likeCount,
+        "viewerRating": viewerRating,
         "createdAt": createdAt,
         "updateAt": updatedAt,
       };

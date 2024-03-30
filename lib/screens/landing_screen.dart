@@ -2,7 +2,6 @@
 
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:string_extensions/string_extensions.dart';
 import 'package:substring_highlight/substring_highlight.dart';
@@ -11,6 +10,7 @@ import 'package:youtube_comment_picker/models/comment.dart';
 import 'package:youtube_comment_picker/models/video_information.dart';
 import 'package:youtube_comment_picker/services/youtube_service.dart';
 import 'package:youtube_comment_picker/widgets/search_video.dart';
+import 'package:youtube_comment_picker/widgets/video_info.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class LandingScreen extends StatefulWidget {
@@ -38,8 +38,6 @@ class _LandingScreenState extends State<LandingScreen> {
   int selectedCommentsCount = 1;
 
   late YoutubePlayerController? _controller;
-
-  NumberFormat formatter = NumberFormat('#,###,000');
 
   Future<void> prepareComments(String video) async {
     allComments = [];
@@ -102,7 +100,7 @@ class _LandingScreenState extends State<LandingScreen> {
       ),
       body: Column(
         children: <Widget>[
-          if (allComments.isEmpty) ...[
+          if (allComments.isEmpty)
             SearchVideo(
               videoFieldController: _videoFieldController,
               onSearch: () async {
@@ -114,8 +112,8 @@ class _LandingScreenState extends State<LandingScreen> {
                   setState(() {});
                 }
               },
-            ),
-          ] else
+            )
+          else
             SizedBox(
               width: MediaQuery.of(context).size.width,
               height: 250,
@@ -132,49 +130,7 @@ class _LandingScreenState extends State<LandingScreen> {
               height: 100,
             )
           else if (videoInfo != null) ...[
-            Padding(
-              padding: const EdgeInsets.only(left: 30.0),
-              child: Column(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    videoInfo!.title!,
-                    textAlign: TextAlign.left,
-                    style: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        '${formatter.format(videoInfo?.viewCount.toInt())} views',
-                        textAlign: TextAlign.left,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        '   ${DateFormat('MMM d, yyyy').format(videoInfo!.publishedAt!)}',
-                        textAlign: TextAlign.left,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+            VideoInfo(videoInfo: videoInfo),
             const SizedBox(
               height: 30,
             ),
@@ -212,16 +168,6 @@ class _LandingScreenState extends State<LandingScreen> {
                             filteredComments = allComments;
                           }
                         });
-
-                        // else {
-                        //   if (filteredComments.isNotEmpty) {
-                        //     log.wtf('Resetting filters');
-                        //     filteredComments = [];
-                        //     filteredComments.addAll(allComments);
-                        //     log.wtf('Filters are ${filteredComments.length}');
-                        //     setState(() {});
-                        //   }
-                        // }
                       },
                     ),
                   ],
@@ -268,6 +214,9 @@ class _LandingScreenState extends State<LandingScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: ListTile(
+                                    onTap: () {
+                                      log.f(filteredComments[index]!.toJson());
+                                    },
                                     key: ValueKey(
                                       filteredComments[index]!
                                           .authorProfileImageUrl!,
