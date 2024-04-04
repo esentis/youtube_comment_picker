@@ -1,3 +1,4 @@
+/// Represents information about a video.
 class VideoInformation {
   final DateTime? publishedAt;
   final String? title;
@@ -7,6 +8,10 @@ class VideoInformation {
   final List<dynamic>? tags;
   final String viewCount;
 
+  /// Constructs a [VideoInformation] object.
+  ///
+  /// The [publishedAt], [title], [description], [thumbnail], [channelTitle],
+  /// [tags], and [viewCount] parameters are required.
   VideoInformation({
     required this.publishedAt,
     required this.title,
@@ -17,6 +22,9 @@ class VideoInformation {
     required this.viewCount,
   });
 
+  /// Constructs a [VideoInformation] object from a JSON map.
+  ///
+  /// The [json] parameter is a JSON map representing the video information.
   factory VideoInformation.fromJson(Map<String, dynamic> json) =>
       VideoInformation(
         publishedAt:
@@ -30,6 +38,9 @@ class VideoInformation {
         viewCount: json['items'][0]['statistics']['viewCount'] as String,
       );
 
+  /// Converts the [VideoInformation] object to a JSON map.
+  ///
+  /// Returns a JSON map representing the video information.
   Map<String, dynamic> toJson() => {
         "title": title,
         "publishedAt": publishedAt,
