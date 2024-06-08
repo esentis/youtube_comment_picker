@@ -104,6 +104,14 @@ Future<List<Comment?>> getComments(String video, BuildContext context) async {
   return comments;
 }
 
+/// Retrieves the information of a YouTube video based on its ID or URL.
+///
+/// If the provided [video] parameter is a URL, it extracts the video ID from it.
+/// Then, it makes an API request to retrieve the video information using the [videoId].
+/// The API request includes the necessary query parameters such as "part", "id", and "key".
+///
+/// Returns the [VideoInformation] object containing the video's snippet, content details, and statistics.
+/// If the video information cannot be retrieved, returns null.
 Future<VideoInformation?> getVideoInformation(String video) async {
   String videoId = '';
 
