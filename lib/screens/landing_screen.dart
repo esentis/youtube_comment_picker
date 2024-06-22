@@ -38,38 +38,43 @@ class _LandingScreenState extends State<LandingScreen> {
 
   late YoutubePlayerController? _controller;
 
-  Future<void> prepareComments(String video) async {
+  Future<void> prepareComments(String videoUrl) async {
     allComments = [];
     filteredComments = [];
     String videoId = '';
 
-    if (video.length > 11) {
-      videoId = video.after('?v=').before('&ab_channel');
+    if (videoUrl.length > 11) {
+      videoId = videoUrl.after('?v=').before('&ab_channel');
     } else {
-      videoId = video;
+      videoId = videoUrl;
     }
-    final res = await Future.wait([
-      getComments(video, context),
-      getVideoInformation(video),
-    ]);
-    _controller = YoutubePlayerController.fromVideoId(
-      videoId: videoId,
-      params: const YoutubePlayerParams(
-        showFullscreenButton: true,
-      ),
-    );
-
-    if (res[0] != null && res[1] != null) {
-      allComments.addAll(res[0] as List<Comment?>);
-      filteredComments.addAll(res[0] as List<Comment?>);
-      videoInfo = res[1] as VideoInformation?;
-
-      allComments.sort(
-        (a, b) => Comparable.compare(b?.likeCount ?? 0, a?.likeCount ?? 0),
+    try {
+      final res = await Future.wait([
+        getComments(videoUrl, context),
+        getVideoInformation(videoUrl),
+      ]);
+      _controller = YoutubePlayerController.fromVideoId(
+        videoId: videoId,
+        params: const YoutubePlayerParams(
+          showFullscreenButton: true,
+        ),
       );
-      filteredComments.sort(
-        (a, b) => Comparable.compare(b?.likeCount ?? 0, a?.likeCount ?? 0),
-      );
+
+      if (res[0] != null && res[1] != null) {
+        allComments.addAll(res[0] as List<Comment?>);
+        filteredComments.addAll(res[0] as List<Comment?>);
+        videoInfo = res[1] as VideoInformation?;
+
+        allComments.sort(
+          (a, b) => Comparable.compare(b?.likeCount ?? 0, a?.likeCount ?? 0),
+        );
+        filteredComments.sort(
+          (a, b) => Comparable.compare(b?.likeCount ?? 0, a?.likeCount ?? 0),
+        );
+      }
+      isSearching = false;
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -78,7 +83,12 @@ class _LandingScreenState extends State<LandingScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(
+          widget.title,
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         actions: [
           if (allComments.isNotEmpty)
             IconButton(
@@ -107,7 +117,7 @@ class _LandingScreenState extends State<LandingScreen> {
                   isSearching = true;
                   setState(() {});
                   await prepareComments(_videoFieldController.text);
-                  isSearching = false;
+
                   setState(() {});
                 }
               },
@@ -200,6 +210,7 @@ class _LandingScreenState extends State<LandingScreen> {
                           '${filteredComments.length} comments found',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
                         ),
                       ),

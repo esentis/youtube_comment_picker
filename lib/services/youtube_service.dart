@@ -115,28 +115,33 @@ Future<List<Comment?>> getComments(String video, BuildContext context) async {
 Future<VideoInformation?> getVideoInformation(String video) async {
   String videoId = '';
 
-  if (video.length > 11) {
-    videoId = video.after('?v=').before('&ab_channel');
-    if (video.isEmpty) {
-      return null;
+  try {
+    if (video.length > 11) {
+      videoId = video.after('?v=').before('&ab_channel');
+      if (video.isEmpty) {
+        return null;
+      }
+    } else {
+      videoId = video;
     }
-  } else {
-    videoId = video;
+
+    final response = await dio.get(
+      'videos',
+      queryParameters: {
+        "part": "snippet,contentDetails,statistics",
+        "id": videoId,
+        "key": dotenv.env['API_KEY'],
+      },
+    );
+
+    final VideoInformation videoInformation =
+        VideoInformation.fromJson(response.data as Map<String, dynamic>);
+
+    log.f(videoInformation.toJson());
+
+    return videoInformation;
+  } catch (e) {
+    log.e(e);
+    return null;
   }
-
-  final response = await dio.get(
-    'videos',
-    queryParameters: {
-      "part": "snippet,contentDetails,statistics",
-      "id": videoId,
-      "key": dotenv.env['API_KEY'],
-    },
-  );
-
-  final VideoInformation videoInformation =
-      VideoInformation.fromJson(response.data as Map<String, dynamic>);
-
-  log.f(videoInformation.toJson());
-
-  return videoInformation;
 }
