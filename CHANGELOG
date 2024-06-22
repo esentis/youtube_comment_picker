@@ -1,3 +1,10 @@
+## [1.1.1] ✨ Improvements
+
+- Change black text colors on red background to white
+- Add date on comments
+- Change the comment layout for better visualization
+- Better error handling
+
 ## [1.1.0] ✨ Updates proejct to Flutter 3.10 & Dart 3.0
 
 ## [1.0.2] ✨ Improvements
