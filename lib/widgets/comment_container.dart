@@ -1,5 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 import 'package:youtube_comment_picker/constants.dart';
@@ -64,8 +65,10 @@ class CommentWidget extends StatelessWidget {
             ),
           ),
           subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SubstringHighlight(
+                textAlign: TextAlign.start,
                 text: comment.text!,
                 term: highlightText,
                 textStyle: const TextStyle(
@@ -91,7 +94,7 @@ class CommentWidget extends StatelessWidget {
                   Text(
                     comment.likeCount!.toString(),
                     style: TextStyle(
-                      color: kColorRedYtb,
+                      color: Colors.white,
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
                     ),
@@ -104,14 +107,30 @@ class CommentWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(
               vertical: 8.0,
             ),
-            child: Text(
-              comment.authorName!,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                decoration: TextDecoration.underline,
-              ),
+            child: Row(
+              children: [
+                Text(
+                  comment.authorName!,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  DateFormat.yMMMd().format(
+                    comment.createdAt!,
+                  ),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
