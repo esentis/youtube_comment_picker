@@ -93,7 +93,7 @@ class CommentWidget extends StatelessWidget {
                   const SizedBox(width: 10),
                   Text(
                     comment.likeCount!.toString(),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
