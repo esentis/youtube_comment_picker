@@ -74,7 +74,7 @@ class _LandingScreenState extends State<LandingScreen> {
       }
       isSearching = false;
     } catch (e) {
-      print(e);
+      log.e(e);
     }
   }
 
@@ -85,7 +85,7 @@ class _LandingScreenState extends State<LandingScreen> {
       appBar: AppBar(
         title: Text(
           widget.title,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),
