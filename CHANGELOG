@@ -1,3 +1,9 @@
+## [1.1.2] ✨ Improvements
+
+- Fixes issue with URLs showing as invalid
+- Changes the size and color of the reset button
+- Removes large player, instead user can trigger the player by tapping the thumbnail
+
 ## [1.1.1] ✨ Improvements
 
 - Change black text colors on red background to white
