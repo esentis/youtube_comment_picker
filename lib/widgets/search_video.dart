@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:youtube_comment_picker/constants.dart';
 
-class SearchVideo extends StatelessWidget {
-  const SearchVideo({
+class SearchVideoField extends StatelessWidget {
+  const SearchVideoField({
     super.key,
     required TextEditingController videoFieldController,
     required this.onSearch,
