@@ -27,8 +27,9 @@ class VideoInformation {
   /// The [json] parameter is a JSON map representing the video information.
   factory VideoInformation.fromJson(Map<String, dynamic> json) =>
       VideoInformation(
-        publishedAt:
-            DateTime.tryParse('${json['items'][0]['snippet']['publishedAt']}'),
+        publishedAt: (json['items'] as List).isNotEmpty
+            ? DateTime.tryParse('${json['items'][0]['snippet']['publishedAt']}')
+            : null,
         title: json['items'][0]['snippet']['title'] as String?,
         description: json['items'][0]['snippet']['description'] as String?,
         thumbnail: json['items'][0]['snippet']['thumbnails']['maxres']?['url']
