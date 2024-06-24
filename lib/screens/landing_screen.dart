@@ -44,7 +44,8 @@ class _LandingScreenState extends State<LandingScreen> {
     String videoId = '';
 
     if (videoUrl.length > 11) {
-      videoId = videoUrl.after('?v=').before('&ab_channel');
+      videoId =
+          videoUrl.after('?v=').before('&ab_channel', defaultToBlank: false);
     } else {
       videoId = videoUrl;
     }
@@ -102,7 +103,11 @@ class _LandingScreenState extends State<LandingScreen> {
                   _filterTextController.clear();
                 });
               },
-              icon: const Icon(Icons.refresh),
+              icon: const Icon(
+                Icons.refresh,
+                size: 35,
+                color: Colors.white,
+              ),
             ),
         ],
         backgroundColor: kColorRedYtb,
@@ -110,7 +115,7 @@ class _LandingScreenState extends State<LandingScreen> {
       body: Column(
         children: <Widget>[
           if (allComments.isEmpty)
-            SearchVideo(
+            SearchVideoField(
               videoFieldController: _videoFieldController,
               onSearch: () async {
                 if (_videoFieldController.text.isNotEmpty) {
@@ -121,14 +126,6 @@ class _LandingScreenState extends State<LandingScreen> {
                   setState(() {});
                 }
               },
-            )
-          else
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: 250,
-              child: YoutubePlayer(
-                controller: _controller!,
-              ),
             ),
           const SizedBox(
             height: 20,
@@ -139,7 +136,10 @@ class _LandingScreenState extends State<LandingScreen> {
               height: 100,
             )
           else if (videoInfo != null) ...[
-            VideoInfo(videoInfo: videoInfo),
+            VideoInfo(
+              videoInfo: videoInfo,
+              ytbController: _controller,
+            ),
             const SizedBox(
               height: 30,
             ),
