@@ -3,6 +3,7 @@ import 'package:image_network/image_network.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:substring_highlight/substring_highlight.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:youtube_comment_picker/constants.dart';
 import 'package:youtube_comment_picker/models/comment.dart';
 
@@ -21,11 +22,6 @@ class CommentWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListTile(
-        onTap: () {
-          kLaunchUrl(
-            comment.authorChannel ?? '',
-          );
-        },
         key: ValueKey(
           comment.authorProfileImageUrl!,
         ),
@@ -82,7 +78,7 @@ class CommentWidget extends StatelessWidget {
             Row(
               children: [
                 const Icon(
-                  Icons.thumb_up,
+                  Icons.thumb_up_off_alt,
                   color: Colors.white,
                 ),
                 const SizedBox(width: 10),
@@ -116,15 +112,25 @@ class CommentWidget extends StatelessWidget {
               const SizedBox(
                 width: 10,
               ),
-              Text(
-                DateFormat.yMMMd().format(
-                  comment.createdAt!,
+              if ((comment.createdAt?.difference(DateTime.now()).inDays ?? 0) <
+                  365)
+                Text(
+                  timeago.format(comment.createdAt!),
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12,
+                  ),
+                )
+              else
+                Text(
+                  DateFormat.yMMMd().format(
+                    comment.createdAt!,
+                  ),
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12,
+                  ),
                 ),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                ),
-              ),
             ],
           ),
         ),
