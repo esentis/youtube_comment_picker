@@ -35,25 +35,30 @@ class VideoInfo extends StatelessWidget {
                   ),
                 );
               },
-              child: Stack(
-                children: [
-                  ImageNetwork(
-                    image: videoInfo!.thumbnail!,
-                    width: 150,
-                    height: 100,
-                  ),
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    child: Icon(
-                      Icons.play_circle,
-                      color: kColorRedYtb,
-                      size: 50,
+              child: SizedBox(
+                width: 150,
+                height: 100,
+                child: Stack(
+                  children: [
+                    if (videoInfo!.thumbnail != null)
+                      ImageNetwork(
+                        image: videoInfo!.thumbnail!,
+                        width: 150,
+                        height: 100,
+                      ),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      bottom: 0,
+                      child: Icon(
+                        Icons.play_circle,
+                        color: kColorRedYtb,
+                        size: 50,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
