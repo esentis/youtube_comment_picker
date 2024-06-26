@@ -25,7 +25,10 @@ Future<List<Comment?>> getComments(String video, BuildContext context) async {
   String videoId = '';
 
   if (video.length > 11) {
-    videoId = video.after('?v=').before('&ab_channel', defaultToBlank: false);
+    videoId = video.after('?v=');
+    if (videoId.contains('&')) {
+      videoId = videoId.before('&');
+    }
     if (videoId.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -117,7 +120,10 @@ Future<VideoInformation?> getVideoInformation(String video) async {
 
   try {
     if (video.length > 11) {
-      videoId = video.after('?v=').before('&ab_channel', defaultToBlank: false);
+      videoId = video.after('?v=');
+      if (videoId.contains('&')) {
+        videoId = videoId.before('&');
+      }
       if (video.isEmpty) {
         return null;
       }
