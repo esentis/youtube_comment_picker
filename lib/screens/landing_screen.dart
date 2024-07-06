@@ -162,16 +162,17 @@ class _LandingScreenState extends State<LandingScreen> {
                           fontSize: 20,
                         ),
                       ),
-                      onChanged: (value) {
-                        log.f(value.length);
+                      onChanged: (term) {
+                        log.f(term.length);
 
                         setState(() {
-                          if (value.isNotEmpty) {
+                          if (term.isNotEmpty) {
                             filteredComments = allComments
                                 .where(
-                                  (c) => c!.text!
-                                      .toLowerCase()
-                                      .contains(value.toLowerCase()),
+                                  (comment) =>
+                                      comment!.text!.toLowerCase().containsAny(
+                                            term.toLowerCase().split(' '),
+                                          ),
                                 )
                                 .toList();
                           } else {

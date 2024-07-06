@@ -19,6 +19,8 @@ class CommentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final terms = highlightText.split(' ');
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListTile(
@@ -60,8 +62,8 @@ class CommentWidget extends StatelessWidget {
           children: [
             SubstringHighlight(
               textAlign: TextAlign.start,
+              terms: terms,
               text: comment.text!,
-              term: highlightText,
               textStyle: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
