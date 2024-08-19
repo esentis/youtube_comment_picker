@@ -25,19 +25,32 @@ class VideoInformation {
   /// Constructs a [VideoInformation] object from a JSON map.
   ///
   /// The [json] parameter is a JSON map representing the video information.
-  factory VideoInformation.fromJson(Map<String, dynamic> json) =>
-      VideoInformation(
-        publishedAt: (json['items'] as List).isNotEmpty
-            ? DateTime.tryParse('${json['items'][0]['snippet']['publishedAt']}')
-            : null,
-        title: json['items'][0]['snippet']['title'] as String?,
-        description: json['items'][0]['snippet']['description'] as String?,
-        thumbnail: json['items'][0]['snippet']['thumbnails']['maxres']?['url']
-            as String?,
-        channelTitle: json['items'][0]['snippet']['channelTitle'] as String?,
-        tags: json['items'][0]['snippet']['tags'] as List<dynamic>?,
-        viewCount: json['items'][0]['statistics']['viewCount'] as String,
-      );
+  factory VideoInformation.fromJson(Map<String, dynamic> json) {
+    final isNotEmpty = (json['items'] as List).isNotEmpty;
+    return VideoInformation(
+      publishedAt: isNotEmpty
+          ? DateTime.tryParse('${json['items'][0]['snippet']['publishedAt']}')
+          : null,
+      title:
+          isNotEmpty ? json['items'][0]['snippet']['title'] as String? : null,
+      description: isNotEmpty
+          ? json['items'][0]['snippet']['description'] as String?
+          : null,
+      thumbnail: isNotEmpty
+          ? (json['items'][0]['snippet']['thumbnails']['maxres']?['url']
+              as String?)
+          : null,
+      channelTitle: isNotEmpty
+          ? json['items'][0]['snippet']['channelTitle'] as String?
+          : null,
+      tags: isNotEmpty
+          ? json['items'][0]['snippet']['tags'] as List<dynamic>?
+          : null,
+      viewCount: isNotEmpty
+          ? json['items'][0]['statistics']['viewCount'] as String
+          : '',
+    );
+  }
 
   /// Converts the [VideoInformation] object to a JSON map.
   ///
