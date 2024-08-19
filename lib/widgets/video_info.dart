@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:image_network/image_network.dart';
 import 'package:intl/intl.dart';
 import 'package:string_extensions/string_extensions.dart';
@@ -15,6 +16,16 @@ class VideoInfo extends StatelessWidget {
 
   final VideoInformation? videoInfo;
   final YoutubePlayerController? ytbController;
+  String _printDuration(Duration duration) {
+    final String negativeSign = duration.isNegative ? '-' : '';
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    final String twoDigitMinutes =
+        twoDigits(duration.inMinutes.remainder(60).abs());
+    final String twoDigitSeconds =
+        twoDigits(duration.inSeconds.remainder(60).abs());
+    return "$negativeSign${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -51,10 +62,34 @@ class VideoInfo extends StatelessWidget {
                       right: 0,
                       top: 0,
                       bottom: 0,
-                      child: Icon(
-                        Icons.play_circle,
-                        color: kColorRedYtb,
-                        size: 50,
+                      child: (videoInfo?.duration.inSeconds ?? 0) <= 60
+                          ? Center(
+                              child: SvgPicture.asset(
+                                'assets/shorts.svg',
+                                height: 35,
+                                width: 35,
+                              ),
+                            )
+                          : Icon(
+                              Icons.play_circle,
+                              color: kColorRedYtb,
+                              size: 35,
+                            ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      child: SizedBox(
+                        width: 150,
+                        child: Center(
+                          child: Text(
+                            _printDuration(videoInfo!.duration),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ],

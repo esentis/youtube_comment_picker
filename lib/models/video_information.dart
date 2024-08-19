@@ -7,6 +7,7 @@ class VideoInformation {
   final String? channelTitle;
   final List<dynamic>? tags;
   final String viewCount;
+  final Duration duration;
 
   /// Constructs a [VideoInformation] object.
   ///
@@ -20,7 +21,26 @@ class VideoInformation {
     required this.channelTitle,
     required this.tags,
     required this.viewCount,
+    required this.duration,
   });
+
+  /// Helper function to parse ISO 8601 duration (e.g., PT1M30S) into a Dart Duration.
+  static Duration parseISO8601Duration(String iso8601Duration) {
+    final RegExp regex = RegExp(r'PT(\d+M)?(\d+S)?');
+    final Match match = regex.firstMatch(iso8601Duration)!;
+
+    int minutes = 0;
+    int seconds = 0;
+
+    if (match.group(1) != null) {
+      minutes = int.parse(match.group(1)!.replaceAll('M', ''));
+    }
+    if (match.group(2) != null) {
+      seconds = int.parse(match.group(2)!.replaceAll('S', ''));
+    }
+
+    return Duration(minutes: minutes, seconds: seconds);
+  }
 
   /// Constructs a [VideoInformation] object from a JSON map.
   ///
@@ -31,6 +51,9 @@ class VideoInformation {
       publishedAt: isNotEmpty
           ? DateTime.tryParse('${json['items'][0]['snippet']['publishedAt']}')
           : null,
+      duration: parseISO8601Duration(
+        json['items'][0]['contentDetails']['duration'] as String,
+      ),
       title:
           isNotEmpty ? json['items'][0]['snippet']['title'] as String? : null,
       description: isNotEmpty

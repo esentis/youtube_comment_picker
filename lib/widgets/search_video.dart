@@ -23,14 +23,22 @@ class SearchVideoField extends StatelessWidget {
           ),
           child: TextField(
             controller: _videoFieldController,
+            textAlign: TextAlign.center,
             style: const TextStyle(
               color: Colors.white,
             ),
             decoration:
                 kInputDecoration(labeText: 'Enter a video URL or ID').copyWith(
+              label: const Center(
+                child: Text("Enter a video URL or ID"),
+              ),
               labelStyle: const TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 17,
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 30,
               ),
             ),
           ),

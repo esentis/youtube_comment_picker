@@ -204,11 +204,16 @@ class _LandingScreenState extends State<LandingScreen> {
                   slivers: [
                     if (filteredComments.isNotEmpty) ...[
                       SliverAppBar(
-                        backgroundColor: kColorRedYtb,
+                        backgroundColor: kColorGreyYtb,
                         elevation: 12,
                         primary: false,
                         pinned: true,
-                        shadowColor: kColorRedYtb,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(12),
+                          ),
+                        ),
+                        shadowColor: kColorGreyYtb.withOpacity(0.5),
                         title: Text(
                           '${filteredComments.length} comments found',
                           style: const TextStyle(

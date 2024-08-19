@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Color kColorRedYtb = const Color(0xffE83020);
-
+Color kColorGreyYtb = const Color(0xff292929);
 InputDecoration kInputDecoration({required String labeText}) => InputDecoration(
       focusColor: kColorRedYtb,
       labelStyle: TextStyle(
@@ -12,14 +12,14 @@ InputDecoration kInputDecoration({required String labeText}) => InputDecoration(
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide(
-          color: kColorRedYtb.withOpacity(0.3),
+          color: kColorGreyYtb.withOpacity(0.3),
           width: 2,
         ),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide(
-          color: kColorRedYtb,
+          color: kColorGreyYtb,
           width: 3,
         ),
       ),
