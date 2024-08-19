@@ -19,15 +19,25 @@ final Dio dio = Dio(ytbOptions);
 Logger log = Logger();
 
 /// Provide either the video URL or the video id.
+/// This method supports both regular YouTube videos and YouTube Shorts.
 Future<List<Comment?>> getComments(String video, BuildContext context) async {
   final List<Comment?> comments = [];
 
   String videoId = '';
 
+  // Check if the input is a URL or a video ID
   if (video.length > 11) {
-    videoId = video.after('?v=');
-    if (videoId.contains('&')) {
-      videoId = videoId.before('&');
+    // If it's a URL, extract the video ID
+    if (video.contains('/shorts/')) {
+      videoId = video.after('/shorts/');
+      if (videoId.contains('?')) {
+        videoId = videoId.before('?');
+      }
+    } else if (video.contains('?v=')) {
+      videoId = video.after('?v=');
+      if (videoId.contains('&')) {
+        videoId = videoId.before('&');
+      }
     }
     if (videoId.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -117,20 +127,24 @@ Future<List<Comment?>> getComments(String video, BuildContext context) async {
 /// If the video information cannot be retrieved, returns null.
 Future<VideoInformation?> getVideoInformation(String video) async {
   String videoId = '';
-
-  try {
-    if (video.length > 11) {
+  // Check if the input is a URL or a video ID
+  if (video.length > 11) {
+    // If it's a URL, extract the video ID
+    if (video.contains('/shorts/')) {
+      videoId = video.after('/shorts/');
+      if (videoId.contains('?')) {
+        videoId = videoId.before('?');
+      }
+    } else if (video.contains('?v=')) {
       videoId = video.after('?v=');
       if (videoId.contains('&')) {
         videoId = videoId.before('&');
       }
-      if (video.isEmpty) {
-        return null;
-      }
-    } else {
-      videoId = video;
     }
-
+  } else {
+    videoId = video;
+  }
+  try {
     final response = await dio.get(
       'videos',
       queryParameters: {
