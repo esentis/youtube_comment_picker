@@ -213,7 +213,7 @@ class _LandingScreenState extends State<LandingScreen> {
                             Radius.circular(12),
                           ),
                         ),
-                        shadowColor: kColorGreyYtb.withOpacity(0.5),
+                        shadowColor: kColorGreyYtb.withValues(alpha: 0.5),
                         title: Text(
                           '${filteredComments.length} comments found',
                           style: const TextStyle(

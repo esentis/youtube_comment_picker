@@ -6,13 +6,13 @@ Color kColorGreyYtb = const Color(0xff292929);
 InputDecoration kInputDecoration({required String labeText}) => InputDecoration(
       focusColor: kColorRedYtb,
       labelStyle: TextStyle(
-        color: kColorRedYtb.withOpacity(0.5),
+        color: kColorRedYtb.withValues(alpha: 0.5),
       ),
       label: Text(labeText),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide(
-          color: kColorGreyYtb.withOpacity(0.3),
+          color: kColorGreyYtb.withValues(alpha: 0.3),
           width: 2,
         ),
       ),
