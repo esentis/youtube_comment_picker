@@ -6,7 +6,6 @@ import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:string_extensions/string_extensions.dart';
 import 'package:substring_highlight/substring_highlight.dart';
@@ -61,11 +60,21 @@ class CommentWidget extends StatelessWidget {
             child: Screenshot(
               controller: controller,
               child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10.0),
+                decoration: BoxDecoration(
+                  color: kColorSurface,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(14.0),
                   ),
+                  border: Border.all(
+                    color: kColorBorder,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.25),
+                      blurRadius: 10,
+                      offset: const Offset(0, 6),
+                    ),
+                  ],
                 ),
                 child: ListTile(
                   key: ValueKey(
@@ -87,9 +96,15 @@ class CommentWidget extends StatelessWidget {
                           height: 50,
                           width: 50,
                           fit: BoxFit.cover,
-                          placeholder: (c, url) => LottieBuilder.asset(
-                            'assets/loading.json',
-                            height: 100,
+                          placeholder: (c, url) => const Center(
+                            child: SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                           errorWidget: (c, url, e) => Image.network(
                             'https://i.imgur.com/qV26MhU.png',
@@ -106,11 +121,11 @@ class CommentWidget extends StatelessWidget {
                         terms: terms,
                         text: comment.text!,
                         textStyle: const TextStyle(
-                          color: Colors.white,
+                          color: kColorText,
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
-                        textStyleHighlight: TextStyle(
+                        textStyleHighlight: const TextStyle(
                           color: kColorRedYtb,
                           fontSize: 16,
                         ),
@@ -122,13 +137,13 @@ class CommentWidget extends StatelessWidget {
                         children: [
                           const Icon(
                             Icons.thumb_up_off_alt,
-                            color: Colors.white,
+                            color: kColorTextMuted,
                           ),
                           const SizedBox(width: 10),
                           Text(
                             comment.likeCount!.toString(),
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: kColorTextMuted,
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
                             ),
@@ -146,7 +161,7 @@ class CommentWidget extends StatelessWidget {
                         Text(
                           comment.authorName!,
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: kColorText,
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                             decoration: TextDecoration.underline,
@@ -163,7 +178,7 @@ class CommentWidget extends StatelessWidget {
                           Text(
                             timeago.format(comment.createdAt!),
                             style: const TextStyle(
-                              color: Colors.grey,
+                              color: kColorTextMuted,
                               fontSize: 12,
                             ),
                           )
@@ -173,7 +188,7 @@ class CommentWidget extends StatelessWidget {
                               comment.createdAt!,
                             ),
                             style: const TextStyle(
-                              color: Colors.grey,
+                              color: kColorTextMuted,
                               fontSize: 12,
                             ),
                           ),
@@ -203,7 +218,7 @@ class CommentWidget extends StatelessWidget {
               },
               child: const Icon(
                 Icons.download,
-                color: Colors.white,
+                color: kColorTextMuted,
               ),
             ),
           ),
