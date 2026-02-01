@@ -29,117 +29,146 @@ class VideoInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 30.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => Dialog(
-                    child: YoutubePlayer(
-                      controller: ytbController!,
-                    ),
-                  ),
-                );
-              },
-              child: SizedBox(
-                width: 150,
-                height: 100,
-                child: Stack(
-                  children: [
-                    if (videoInfo!.thumbnail != null)
-                      ImageNetwork(
-                        image: videoInfo!.thumbnail!,
-                        width: 150,
-                        height: 100,
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: kColorSurface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: kColorBorder,
+          ),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => Dialog(
+                      child: YoutubePlayer(
+                        controller: ytbController!,
                       ),
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      top: 0,
-                      bottom: 0,
-                      child: (videoInfo?.duration.inSeconds ?? 0) <= 60
-                          ? Center(
-                              child: SvgPicture.asset(
-                                'assets/shorts.svg',
-                                height: 35,
-                                width: 35,
-                              ),
-                            )
-                          : Icon(
-                              Icons.play_circle,
-                              color: kColorRedYtb,
-                              size: 35,
-                            ),
                     ),
-                    Positioned(
-                      bottom: 0,
-                      child: SizedBox(
-                        width: 150,
+                  );
+                },
+                child: SizedBox(
+                  width: 150,
+                  height: 100,
+                  child: Stack(
+                    children: [
+                      if (videoInfo!.thumbnail != null)
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: ImageNetwork(
+                            image: videoInfo!.thumbnail!,
+                            width: 150,
+                            height: 100,
+                          ),
+                        ),
+                      Positioned(
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        child: (videoInfo?.duration.inSeconds ?? 0) <= 60
+                            ? Center(
+                                child: SvgPicture.asset(
+                                  'assets/shorts.svg',
+                                  height: 35,
+                                  width: 35,
+                                ),
+                              )
+                            : const Icon(
+                                Icons.play_circle,
+                                color: kColorRedYtb,
+                                size: 35,
+                              ),
+                      ),
+                      Positioned(
+                        bottom: 6,
+                        left: 0,
+                        right: 0,
                         child: Center(
-                          child: Text(
-                            _printDuration(videoInfo!.duration),
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withValues(alpha: 0.6),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              _printDuration(videoInfo!.duration),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(
-            width: 20,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SelectableText(
-                videoInfo!.title!,
-                textAlign: TextAlign.left,
-                style: const TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Row(
+            const SizedBox(
+              width: 20,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '${NumberFormat('#,###,000').format(videoInfo?.viewCount.toInt())} views',
+                  SelectableText(
+                    videoInfo!.title!,
                     textAlign: TextAlign.left,
+                    maxLines: 2,
                     style: const TextStyle(
+                      fontSize: 17,
                       fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                      color: Colors.white,
+                      color: kColorText,
                     ),
                   ),
-                  Text(
-                    '   ${DateFormat('MMM d, yyyy').format(videoInfo!.publishedAt!)}',
-                    textAlign: TextAlign.left,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                      color: Colors.white,
-                    ),
+                  const SizedBox(
+                    height: 6,
+                  ),
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 4,
+                    children: [
+                      Text(
+                        '${NumberFormat('#,###,000').format(videoInfo?.viewCount.toInt())} views',
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 13,
+                          color: kColorTextMuted,
+                        ),
+                      ),
+                      Text(
+                        DateFormat('MMM d, yyyy').format(
+                          videoInfo!.publishedAt!,
+                        ),
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 13,
+                          color: kColorTextMuted,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
