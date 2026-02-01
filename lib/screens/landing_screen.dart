@@ -14,9 +14,14 @@ import 'package:youtube_comment_picker/widgets/video_info.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class LandingScreen extends StatefulWidget {
-  const LandingScreen({super.key, required this.title});
+  const LandingScreen({
+    super.key,
+    required this.title,
+    required this.appVersion,
+  });
 
   final String title;
+  final String appVersion;
 
   @override
   State<LandingScreen> createState() => _LandingScreenState();
@@ -365,8 +370,10 @@ class _LandingScreenState extends State<LandingScreen>
               decoration: BoxDecoration(
                 color: kColorSurface,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: kColorBorder,
+                border: const Border(
+                  top: BorderSide(color: kColorBorder),
+                  left: BorderSide(color: kColorBorder),
+                  right: BorderSide(color: kColorBorder),
                 ),
               ),
               child: TabBar(
@@ -740,11 +747,24 @@ class _LandingScreenState extends State<LandingScreen>
     return Scaffold(
       backgroundColor: kColorBackground,
       appBar: AppBar(
-        title: Text(
-          widget.title,
-          style: const TextStyle(
-            color: kColorText,
-            fontWeight: FontWeight.w600,
+        title: Text.rich(
+          TextSpan(
+            text: widget.title,
+            style: const TextStyle(
+              color: kColorText,
+              fontWeight: FontWeight.w600,
+            ),
+            children: [
+              TextSpan(
+                text: '  v${widget.appVersion}',
+                style: const TextStyle(
+                  color: kColorTextMuted,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.4,
+                ),
+              ),
+            ],
           ),
         ),
         centerTitle: false,
