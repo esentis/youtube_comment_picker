@@ -311,14 +311,13 @@ class _LandingScreenState extends State<LandingScreen>
       }
     } catch (e) {
       log.e(e);
-    } finally {
-      if (!mounted) {
-        return;
-      }
-      setState(() {
-        tab.isLoading = false;
-      });
+    } finally {}
+    if (!mounted) {
+      return;
     }
+    setState(() {
+      tab.isLoading = false;
+    });
   }
 
   void _rebuildTabController({int? nextIndex}) {
