@@ -6,12 +6,14 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:youtube_comment_picker/constants.dart';
 import 'package:youtube_comment_picker/screens/landing_screen.dart';
+import 'package:youtube_comment_picker/service_locator/service_locator.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setPathUrlStrategy();
   await dotenv.load(fileName: 'dotenv');
   final info = await PackageInfo.fromPlatform();
+  setupServiceLocator();
   runApp(MyApp(appVersion: info.version));
 }
 

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:youtube_comment_picker/constants.dart';
 import 'package:youtube_comment_picker/bloc/landing/landing_bloc.dart';
 import 'package:youtube_comment_picker/bloc/landing/landing_event.dart';
 import 'package:youtube_comment_picker/bloc/landing/landing_state.dart';
+import 'package:youtube_comment_picker/constants.dart';
 import 'package:youtube_comment_picker/screens/widgets/landing_history_view.dart';
 import 'package:youtube_comment_picker/screens/widgets/landing_search_tab_view.dart';
 import 'package:youtube_comment_picker/screens/widgets/landing_tabs_header.dart';
 import 'package:youtube_comment_picker/screens/widgets/landing_video_tab_view.dart';
+import 'package:youtube_comment_picker/service_locator/service_locator.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 /// Entry point for the landing experience.
@@ -24,8 +25,8 @@ class LandingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => LandingBloc()..add(const LandingStarted()),
+    return BlocProvider.value(
+      value: getIt<LandingBloc>(),
       child: _LandingScreenView(
         title: title,
         appVersion: appVersion,
@@ -55,6 +56,12 @@ class _LandingScreenViewState extends State<_LandingScreenView>
   final Map<int, TextEditingController> _filterControllers = {};
   final Map<int, YoutubePlayerController> _playerControllers = {};
   final Set<int> _knownTabIds = {};
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<LandingBloc>().add(const LandingStarted());
+  }
 
   @override
   void dispose() {
