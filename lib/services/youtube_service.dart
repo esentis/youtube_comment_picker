@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
 import 'package:string_extensions/string_extensions.dart';
@@ -20,46 +19,14 @@ Logger log = Logger();
 
 /// Provide either the video URL or the video id.
 /// This method supports both regular YouTube videos and YouTube Shorts.
-Future<List<Comment?>> getComments(String video, BuildContext context) async {
-  final List<Comment?> comments = [];
+Future<List<Comment?>> getComments(String video) async {
+  final comments = <Comment?>[];
 
-  String videoId = '';
-
-  // Check if the input is a URL or a video ID
-  if (video.length > 11) {
-    // If it's a URL, extract the video ID
-    if (video.contains('/shorts/')) {
-      videoId = video.after('/shorts/');
-      if (videoId.contains('?')) {
-        videoId = videoId.before('?');
-      }
-    } else if (video.contains('?v=')) {
-      videoId = video.after('?v=');
-      if (videoId.contains('&')) {
-        videoId = videoId.before('&');
-      }
-    }
-    if (videoId.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          width: MediaQuery.of(context).size.width * .8,
-          backgroundColor: Colors.red,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 20,
-          ),
-          shape: const RoundedRectangleBorder(),
-          content: const Text(
-            'The URL provided is not a valid YouTube video URL!',
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-      return [];
-    }
-  } else {
-    videoId = video;
+  final videoId = _extractVideoId(video);
+  if (videoId == null) {
+    throw YoutubeServiceException(
+      'The URL provided is not a valid YouTube video URL!',
+    );
   }
 
   try {
@@ -95,26 +62,69 @@ Future<List<Comment?>> getComments(String video, BuildContext context) async {
       comments.addAll(res.comments?.toList() ?? []);
     }
   } on DioException catch (e) {
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          width: MediaQuery.of(context).size.width * .8,
-          backgroundColor: Colors.red,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 20,
-          ),
-          shape: const RoundedRectangleBorder(),
-          content: Text(
-            '${e.message}',
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-    }
+    throw YoutubeServiceException(
+      e.message ?? 'Unable to load comments.',
+      cause: e,
+    );
   }
   return comments;
+}
+
+String? _extractVideoId(String input) {
+  final trimmed = input.trim();
+  if (trimmed.isEmpty) {
+    return null;
+  }
+
+  if (trimmed.length <= 11 && !trimmed.contains(' ')) {
+    return trimmed;
+  }
+
+  if (trimmed.contains('/shorts/')) {
+    var id = trimmed.after('/shorts/');
+    if (id.contains('?')) {
+      id = id.before('?');
+    }
+    if (id.contains('&')) {
+      id = id.before('&');
+    }
+    return id.isEmpty ? null : id;
+  }
+
+  if (trimmed.contains('youtu.be/')) {
+    var id = trimmed.after('youtu.be/');
+    if (id.contains('?')) {
+      id = id.before('?');
+    }
+    if (id.contains('&')) {
+      id = id.before('&');
+    }
+    return id.isEmpty ? null : id;
+  }
+
+  if (trimmed.contains('?v=')) {
+    var id = trimmed.after('?v=');
+    if (id.contains('&')) {
+      id = id.before('&');
+    }
+    return id.isEmpty ? null : id;
+  }
+
+  return null;
+}
+
+/// Exception thrown when a YouTube API request fails.
+class YoutubeServiceException implements Exception {
+  /// Creates an exception with a human-readable [message].
+  YoutubeServiceException(this.message, {this.cause});
+
+  final String message;
+  final Object? cause;
+
+  @override
+  String toString() {
+    return 'YoutubeServiceException: $message';
+  }
 }
 
 /// Retrieves the information of a YouTube video based on its ID or URL.
