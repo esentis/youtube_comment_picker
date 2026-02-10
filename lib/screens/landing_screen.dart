@@ -4,12 +4,12 @@ import 'package:youtube_comment_picker/bloc/landing/landing_bloc.dart';
 import 'package:youtube_comment_picker/bloc/landing/landing_event.dart';
 import 'package:youtube_comment_picker/bloc/landing/landing_state.dart';
 import 'package:youtube_comment_picker/constants.dart';
+import 'package:youtube_comment_picker/screens/landing_tab_controllers.dart';
 import 'package:youtube_comment_picker/screens/widgets/landing_history_view.dart';
 import 'package:youtube_comment_picker/screens/widgets/landing_search_tab_view.dart';
 import 'package:youtube_comment_picker/screens/widgets/landing_tabs_header.dart';
 import 'package:youtube_comment_picker/screens/widgets/landing_video_tab_view.dart';
 import 'package:youtube_comment_picker/service_locator/service_locator.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 /// Entry point for the landing experience.
 class LandingScreen extends StatelessWidget {
@@ -51,11 +51,7 @@ class _LandingScreenView extends StatefulWidget {
 class _LandingScreenViewState extends State<_LandingScreenView>
     with TickerProviderStateMixin {
   TabController? _tabController;
-
-  final Map<int, TextEditingController> _searchControllers = {};
-  final Map<int, TextEditingController> _filterControllers = {};
-  final Map<int, YoutubePlayerController> _playerControllers = {};
-  final Set<int> _knownTabIds = {};
+  final LandingTabControllers _tabControllers = LandingTabControllers();
 
   @override
   void initState() {
@@ -66,15 +62,7 @@ class _LandingScreenViewState extends State<_LandingScreenView>
   @override
   void dispose() {
     _disposeTabController();
-    for (final controller in _searchControllers.values) {
-      controller.dispose();
-    }
-    for (final controller in _filterControllers.values) {
-      controller.dispose();
-    }
-    for (final controller in _playerControllers.values) {
-      controller.close();
-    }
+    _tabControllers.dispose();
     super.dispose();
   }
 
@@ -124,54 +112,6 @@ class _LandingScreenViewState extends State<_LandingScreenView>
     }
   }
 
-  void _syncControllers(LandingState state) {
-    final activeIds = <int>{};
-
-    for (final tab in state.tabs) {
-      activeIds.add(tab.id);
-      if (tab is LandingSearchTab) {
-        _disposeVideoControllers(tab.id);
-        _searchControllers.putIfAbsent(tab.id, TextEditingController.new);
-      } else if (tab is LandingVideoTab) {
-        _disposeSearchControllers(tab.id);
-        final filterController = _filterControllers.putIfAbsent(
-          tab.id,
-          () => TextEditingController(text: tab.filterTerm),
-        );
-        if (filterController.text != tab.filterTerm) {
-          filterController.text = tab.filterTerm;
-        }
-        _playerControllers.putIfAbsent(
-          tab.id,
-          () => YoutubePlayerController.fromVideoId(
-            videoId: tab.videoId,
-            params: const YoutubePlayerParams(
-              showFullscreenButton: true,
-            ),
-          ),
-        );
-      }
-    }
-
-    for (final id in _knownTabIds.difference(activeIds)) {
-      _disposeSearchControllers(id);
-      _disposeVideoControllers(id);
-    }
-
-    _knownTabIds
-      ..clear()
-      ..addAll(activeIds);
-  }
-
-  void _disposeSearchControllers(int tabId) {
-    _searchControllers.remove(tabId)?.dispose();
-  }
-
-  void _disposeVideoControllers(int tabId) {
-    _filterControllers.remove(tabId)?.dispose();
-    _playerControllers.remove(tabId)?.close();
-  }
-
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -207,7 +147,7 @@ class _LandingScreenViewState extends State<_LandingScreenView>
         context.read<LandingBloc>().add(const LandingMessageConsumed());
       },
       builder: (context, state) {
-        _syncControllers(state);
+        _tabControllers.sync(state);
         _syncTabController(state);
 
         return Scaffold(
@@ -302,7 +242,8 @@ class _LandingScreenViewState extends State<_LandingScreenView>
                       controller: _tabController,
                       children: state.tabs.map((tab) {
                         if (tab is LandingSearchTab) {
-                          final controller = _searchControllers[tab.id]!;
+                          final controller =
+                              _tabControllers.searchControllerFor(tab.id)!;
                           return KeyedSubtree(
                             key: ValueKey('search-${tab.id}'),
                             child: LandingSearchTabView(
@@ -320,9 +261,10 @@ class _LandingScreenViewState extends State<_LandingScreenView>
                         }
 
                         final videoTab = tab as LandingVideoTab;
-                        final controller = _playerControllers[videoTab.id];
+                        final controller =
+                            _tabControllers.playerControllerFor(videoTab.id);
                         final filterController =
-                            _filterControllers[videoTab.id]!;
+                            _tabControllers.filterControllerFor(videoTab.id)!;
 
                         return KeyedSubtree(
                           key: ValueKey('video-${videoTab.id}'),
